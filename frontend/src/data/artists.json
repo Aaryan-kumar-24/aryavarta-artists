@@ -1,0 +1,11 @@
+[
+  { "id": 1, "name": "Aryan", "image": "/images/aryan.jpg" },
+  { "id": 2, "name": "Tarun", "image": "/images/tarun.jpg" },
+  { "id": 3, "name": "Richa", "image": "/images/richa.jpg" },
+  { "id": 4, "name": "Harshita", "image": "/images/harshita.jpg" },
+  { "id": 5, "name": "Tejash", "image": "/images/tejash.jpg" },
+  { "id": 6, "name": "Ishita", "image": "/images/ishita.jpg" },
+  { "id": 7, "name": "Jay", "image": "/images/jay.png" },
+  { "id": 8, "name": "Dhanush", "image": "/images/dhanush.jpg" },
+  { "id": 9, "name": "Pushpa", "image": "/images/pushpa.jpg" }
+]
