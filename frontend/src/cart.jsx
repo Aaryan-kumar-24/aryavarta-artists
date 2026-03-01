@@ -52,16 +52,15 @@ useEffect(() => {
   fetchCart();
 }, []);
 
-const total = cart.reduce(
-  (sum, item) =>
-    sum +
-    Number(
-      item.artwork
-        ? item.artwork.price
-        : item.commission.price
-    ),
-  0
-);
+const total = cart.reduce((sum, item) => {
+  if (item?.artwork?.price) {
+    return sum + Number(item.artwork.price);
+  }
+  if (item?.commission?.price) {
+    return sum + Number(item.commission.price);
+  }
+  return sum; // skip broken item
+}, 0);
 
   // 🔥 EXACT SAME CSS (FULL COPY)
   useEffect(() => {
@@ -304,67 +303,74 @@ h1.title {
           </p>
         ) : (
           <>
-            {cart.map((item, index) => (
-              <div
-                className="art-card"
-                key={index}
-                style={{ animationDelay: `${index * 0.15}s` }}
-              >
+{cart.map((item, index) => {
+  if (!item?.artwork && !item?.commission) return null; // ✅ skip bad data
 
+  return (
+    <div
+      className="art-card"
+      key={index}
+      style={{ animationDelay: `${index * 0.15}s` }}
+    >
 
-{item.artwork ? (
-  <img
-    src={`http://localhost:5001${item.artwork.image}`}
-    className="art-img"
-  />
-) : (
-  <img
-    src={`http://localhost:5001${item.commission.image}`}
-    className="art-img"
-  />
-)}
-                <div className="art-details">
-<h4>
-  🎨 {item.artwork ? item.artwork.title : "Custom Commission"}
-</h4>
+      {item.artwork ? (
+        <img
+          src={`http://localhost:5001${item.artwork.image}`}
+          className="art-img"
+        />
+      ) : (
+        <img
+          src={`http://localhost:5001${item.commission?.image}`}
+          className="art-img"
+        />
+      )}
 
-<p className="art-description">
-  {item.artwork
-    ? item.artwork.description
-    : item.commission.custom}
-</p>
-{item.commission && (
-  <div style={{ color: "#555", fontWeight: "bold" }}>
-    Status: {item.commission.status}
-  </div>
-)}
-                  {/* 🔥 IMPORTANT MESSAGE (YOU WERE MISSING THIS) */}
-                  <div className="purchase-message">
-                    🎨 This unique artwork brings creativity and inspiration into your space.
-                    Owning it supports the artist and adds timeless beauty to your collection.
-                    Thank you for choosing this masterpiece! 💖
-                  </div>
+      <div className="art-details">
+        <h4>
+          🎨 {item.artwork ? item.artwork.title : "Custom Commission"}
+        </h4>
 
-<span className="badge-price">
-  Price : ₹{item.artwork ? item.artwork.price : item.commission.price}
-</span>
-                  <div className="card-buttons">
-                    <button
-                      className="btn-art-purchase btn-remove"
-                 onClick={() =>
-  removeItem(item.artwork?._id || item.commission?._id)
-}
-                    >
-                      🗑 Remove
-                    </button>
+        <p className="art-description">
+          {item.artwork
+            ? item.artwork.description
+            : item.commission?.custom}
+        </p>
 
-                    <button className="btn-art-cart btn-wishlist">
-                      ❤️ Wishlist
-                    </button>
-                  </div>
-                </div>
-              </div>
-            ))}
+        {item.commission && (
+          <div style={{ color: "#555", fontWeight: "bold" }}>
+            Status: {item.commission.status}
+          </div>
+        )}
+
+        <div className="purchase-message">
+          🎨 This unique artwork brings creativity and inspiration into your space.
+          Owning it supports the artist and adds timeless beauty to your collection.
+          Thank you for choosing this masterpiece! 💖
+        </div>
+
+        <span className="badge-price">
+          Price : ₹
+          {item.artwork?.price || item.commission?.price || 0}
+        </span>
+
+        <div className="card-buttons">
+          <button
+            className="btn-art-purchase btn-remove"
+            onClick={() =>
+              removeItem(item.artwork?._id || item.commission?._id)
+            }
+          >
+            🗑 Remove
+          </button>
+
+          <button className="btn-art-cart btn-wishlist">
+            ❤️ Wishlist
+          </button>
+        </div>
+      </div>
+    </div>
+  );
+})} 
 
             <div className="total-price">
               Total: ₹{total.toLocaleString("en-IN")}

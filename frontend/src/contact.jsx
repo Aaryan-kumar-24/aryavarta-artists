@@ -28,6 +28,16 @@ const Contact = () => {
       return;
     }
 
+    // ✅ VALIDATION CHECK (IMPORTANT)
+    const isEmpty = Object.values(formData).some(
+      (value) => value.trim() === ""
+    );
+
+    if (isEmpty) {
+      alert("Please fill all fields before submitting!");
+      return;
+    }
+
     await fetch("http://localhost:5001/api/contact", {
       method: "POST",
       headers: {
@@ -39,7 +49,7 @@ const Contact = () => {
 
     alert("Message sent successfully!");
 
-    // ✅ optional: clear form after submit
+    // ✅ clear form after submit
     setFormData({
       phone: "",
       email: "",
@@ -50,7 +60,7 @@ const Contact = () => {
     });
   };
 
-  // ✅ Inject SAME CSS
+  // ✅ SAME CSS (unchanged)
   useEffect(() => {
     const style = document.createElement("style");
     style.innerHTML = `

@@ -1,4 +1,4 @@
-  import React, { useEffect, useState } from "react";   
+  import React, { useEffect, useState , useRef } from "react";   
   import { Link } from "react-router-dom";
 
   import { ArtistSlider } from "./ArtistSlider";
@@ -14,13 +14,13 @@
     return (
       <>
         <CarouselComponent />
+        <TopArtworks />
+        <ArtistSlider />
 
         {/* 👇 SHOW BASED ON ROLE */}
         {role === "buyer" && <CommissionForm />}
         {role === "seller" && <ArtistDashboard />}
   <NotificationBar />
-        <ArtistSlider />
-        <TopArtworks />
       </>
     );
   };
@@ -142,9 +142,9 @@
 
   export { CarouselComponent};
 
-
-  const CommissionForm = () => {
+const CommissionForm = () => {
   const [artists, setArtists] = useState([]);
+
   useEffect(() => {
     const fetchArtists = async () => {
       const res = await fetch("http://localhost:5001/api/auth/artists");
@@ -154,70 +154,92 @@
 
     fetchArtists();
   }, []);
+
   const user = JSON.parse(localStorage.getItem("user"));
-    const [formData, setFormData] = useState({
-      phone: "",
-    email: user?.email || "",  
-      medium: "",
-      price: "",
-      artist: "",
-      custom: "",
-      image: null,
-      agree: false
-    });
 
-    const handleChange = (e) => {
-      const { name, value, type, checked, files } = e.target;
+  const [formData, setFormData] = useState({
+    phone: "",
+    email: user?.email || "",
+    medium: "",
+    price: "",
+    artist: "",
+    custom: "",
+    image: null,
+    agree: false,
+  });
 
-      setFormData({
-        ...formData,
-        [name]: type === "checkbox"
+  // ✅ file reset ref
+  const fileRef = useRef();
+
+  const handleChange = (e) => {
+    const { name, value, type, checked, files } = e.target;
+
+    setFormData({
+      ...formData,
+      [name]:
+        type === "checkbox"
           ? checked
           : type === "file"
           ? files[0]
-          : value
-      });
-    };
+          : value,
+    });
+  };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
 
     const token = localStorage.getItem("token");
 
-  const formDataObj = new FormData();
+    const formDataObj = new FormData();
 
-  Object.keys(formData).forEach(key => {
-    formDataObj.append(key, formData[key]);
-  });
+    Object.keys(formData).forEach((key) => {
+      formDataObj.append(key, formData[key]);
+    });
 
-  await fetch("http://localhost:5001/api/commission", {
-    method: "POST",
-    headers: {
-      Authorization: "Bearer " + token
-    },
-    body: formDataObj
-  });
+    await fetch("http://localhost:5001/api/commission", {
+      method: "POST",
+      headers: {
+        Authorization: "Bearer " + token,
+      },
+      body: formDataObj,
+    });
 
     alert("Commission sent!");
+
+    // ✅ RESET STATE
+    setFormData({
+      phone: "",
+      email: user?.email || "",
+      medium: "",
+      price: "",
+      artist: "",
+      custom: "",
+      image: null,
+      agree: false,
+    });
+
+    // ✅ RESET FILE INPUT
+    if (fileRef.current) {
+      fileRef.current.value = "";
+    }
   };
 
-    return (
-      <>
+  return (
+    <>
       <h2 className="doodle-heading">
-    <span className="emoji">🎨</span>
+        <span className="emoji">🎨</span>
 
-    <span className="text t1">Let’s</span>
-    <span className="text t2">Doodle</span>
-    <span className="text t3">Up</span>
-    <span className="text t4">Your</span>
-    <span className="text t5">Dreams!</span>
+        <span className="text t1">Let’s</span>
+        <span className="text t2">Doodle</span>
+        <span className="text t3">Up</span>
+        <span className="text t4">Your</span>
+        <span className="text t5">Dreams!</span>
 
-    <span className="emoji">💭✨</span>
-  </h2>
+        <span className="emoji">💭✨</span>
+      </h2>
+
       <div className="commission-fun-form-wrapper">
-
         <form className="fun-form" onSubmit={handleSubmit}>
-
           <h2 className="text-center fun-title">
             🎨 Let’s Paint Your Imagination! ✨
           </h2>
@@ -226,12 +248,25 @@
           <div className="form-section bounce">
             <div className="field-with-icon">
               <label>📞 Phone</label>
-              <input type="number" name="phone" required placeholder="Enter your number 🎯" onChange={handleChange}/>
+              <input
+                type="number"
+                name="phone"
+                value={formData.phone}
+                required
+                placeholder="Enter your number 🎯"
+                onChange={handleChange}
+              />
             </div>
 
             <div className="field-with-icon">
               <label>📧 Email</label>
-              <input type="email" name="email" value={formData.email} disabled placeholder="Magical email here ✉️" onChange={handleChange}/>
+              <input
+                type="email"
+                name="email"
+                value={formData.email}
+                disabled
+                placeholder="Magical email here ✉️"
+              />
             </div>
           </div>
 
@@ -239,7 +274,12 @@
           <div className="form-section flip">
             <div className="field-with-icon">
               <label>🖌️ Art Medium</label>
-              <select name="medium" required onChange={handleChange}>
+              <select
+                name="medium"
+                value={formData.medium}
+                required
+                onChange={handleChange}
+              >
                 <option value="">Pick your potion...</option>
                 <option>Charcoal</option>
                 <option>Oil Painting</option>
@@ -252,7 +292,14 @@
 
             <div className="field-with-icon">
               <label>💰 Price</label>
-              <input type="number" name="price" required placeholder="₹ How much magic?" onChange={handleChange}/>
+              <input
+                type="number"
+                name="price"
+                value={formData.price}
+                required
+                placeholder="₹ How much magic?"
+                onChange={handleChange}
+              />
             </div>
           </div>
 
@@ -260,33 +307,58 @@
           <div className="form-section paint-fall">
             <div className="field-with-icon">
               <label>🖼️ Reference Image</label>
-              <input type="file" name="image" required onChange={handleChange}/>
+              <input
+                type="file"
+                name="image"
+                ref={fileRef}
+                required
+                onChange={handleChange}
+              />
             </div>
 
             <div className="field-with-icon">
               <label>🎨 Artist Name</label>
-            <select name="artist" required onChange={handleChange}>
-    <option value="">Select Artist 🎨</option>
-
-    {artists.map((artist) => (
-      <option key={artist._id} value={artist._id}>
-        {artist.name || artist.email}
-      </option>
-    ))}
-  </select>          </div>
+              <select
+                name="artist"
+                value={formData.artist}
+                required
+                onChange={handleChange}
+              >
+                <option value="">Select Artist 🎨</option>
+                {artists.map((artist) => (
+                  <option key={artist._id} value={artist._id}>
+                    {artist.name || artist.email}
+                  </option>
+                ))}
+              </select>
+            </div>
           </div>
 
           {/* Section 4 */}
           <div className="form-section fade-in">
             <div className="field-with-icon">
               <label>✨ Customization Details</label>
-              <textarea name="custom" rows="3" required placeholder="Describe the magic 🧙‍♂️..." onChange={handleChange}></textarea>
+              <textarea
+                name="custom"
+                value={formData.custom}
+                rows="3"
+                required
+                placeholder="Describe the magic 🧙‍♂️..."
+                onChange={handleChange}
+              ></textarea>
             </div>
           </div>
 
           {/* Checkbox */}
           <div className="form-check mt-2">
-            <input className="cheks" type="checkbox" name="agree" required onChange={handleChange}/>
+            <input
+              className="cheks"
+              type="checkbox"
+              name="agree"
+              checked={formData.agree}
+              required
+              onChange={handleChange}
+            />
             <label>🪄 I want to book this enchanted art!</label>
           </div>
 
@@ -296,8 +368,8 @@
               🚀 Send to Artist!
             </button>
           </div>
-
         </form>
+
 
         <style>
           {`

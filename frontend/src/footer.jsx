@@ -136,9 +136,8 @@ const Footer = () => {
             <h5 style={styles.heading}>📌 Quick Links</h5>
             <Link to="/" style={styles.link}>Home</Link>
             <Link to="/learn" style={styles.link}>Learn</Link>
-            <Link to="/artworks" style={styles.link}>All Artworks</Link>
+            <Link to="/allartworks" style={styles.link}>All Artworks</Link>
             <Link to="/contact" style={styles.link}>Contact Us</Link>
-            <Link to="/profile" style={styles.link}>Your Profile</Link>
             <Link to="/cart" style={styles.link}>Cart</Link>
           </div>
 

@@ -1,112 +1,189 @@
-import React from "react";
+import React, { useEffect } from "react";
 import artworks from "./data/artworks.json";
 
 const TopArtworks = () => {
+  useEffect(() => {
+    const style = document.createElement("style");
+    style.innerHTML = `
+body {
+  background: linear-gradient(to right, #e1ece8ff, #e7ebe0ff, #eee8e3ff);
+}
+
+/* ✅ GRID → EXACTLY 4 CARDS */
+.art-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 30px;
+  padding: 0 20px;
+}
+
+/* 🎨 CARD */
+.art-card {
+  width: 100%;
+  background: #ffffffdd;
+  border: 2px dashed #ffa07a;
+  border-radius: 20px;
+  padding: 8px;
+  box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+  position: relative;
+  overflow: hidden;
+
+  /* 🔥 IMPORTANT */
+  transition: transform 0.35s ease, box-shadow 0.35s ease;
+}
+
+/* blobs */
+.art-card::before,
+.art-card::after {
+  content: "";
+  position: absolute;
+  width: 120px;
+  height: 120px;
+  background: radial-gradient(circle, #fcd5ce, #ffb4a2);
+  border-radius: 50%;
+  opacity: 0.3;
+  z-index: 0;
+}
+
+.art-card::before {
+  top: -40px;
+  left: -40px;
+}
+
+.art-card::after {
+  bottom: -50px;
+  right: -50px;
+}
+
+/* 🔥 NEW HOVER (ZOOM + DEEP SHADOW) */
+.art-card:hover {
+  transform: scale(1.06);   /* 🔥 zoom effect */
+  
+  box-shadow: 
+    0 25px 50px rgba(0,0,0,0.25),   /* main deep shadow */
+    0 10px 20px rgba(0,0,0,0.15),   /* soft layer */
+    0 0 0 2px rgba(255,160,122,0.25); /* subtle glow border */
+}
+
+/* IMAGE */
+.art-img {
+  width: 100%;
+  height: 360px;
+  object-fit: cover;
+  border-radius: 14px;
+  border: 6px solid white;
+  margin-bottom: 10px;
+  position: relative;
+  z-index: 1;
+}
+
+/* CONTENT */
+.art-title {
+  font-family: 'Indie Flower', cursive;
+  font-size: 1.7rem;
+  color: #333;
+  margin-bottom: 5px;
+  z-index: 1;
+  position: relative;
+
+  text-align: center;   /* ✅ ADD THIS */
+}
+
+.art-desc {
+  font-size: 0.9rem;
+  color: #555;
+  margin-bottom: 8px;
+  z-index: 1;
+  position: relative;
+}
+
+/* PRICE */
+.price-row {
+  display: flex;
+  justify-content: center;   /* ✅ center price */
+  align-items: center;
+  gap: 8px;
+  z-index: 1;
+  position: relative;
+  font-size:2rem;
+}
+
+.old {
+  text-decoration: line-through;
+  color: #999;
+  font-size: 0.9rem;
+}
+
+.new {
+  font-weight: bold;
+  font-size: 1.3rem;
+  color: #e63946;
+}
+
+/* HEADING */
+.heading {
+  font-family: 'Indie Flower', cursive;
+  text-align: center;
+  font-size: 3rem;
+  margin-top: 120px;
+  margin-bottom: 40px;
+  color: #e63946;
+}
+
+/* RESPONSIVE */
+@media (max-width: 1200px) {
+  .art-grid {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+@media (max-width: 900px) {
+  .art-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 500px) {
+  .art-grid {
+    grid-template-columns: 1fr;
+  }
+}
+`;
+    document.head.appendChild(style);
+
+    return () => {
+      document.head.removeChild(style);
+    };
+  }, []);
+
   return (
-    <div style={{ paddingBottom: "100px" }}>
-      
-      {/* 🔥 HEADING (same as yours) */}
-      <h2
-        style={{
-          fontFamily: "cursive",
-          fontWeight: "bold",
-          fontSize: "3.4rem",
-          color: "#333",
-          display: "flex",
-          paddingTop: "160px",
-          paddingBottom: "60px",
-          alignItems: "center",
-          justifyContent: "center",
-          gap: "12px",
-          animation: "slideIn 1.5s ease-out"
-        }}
-      >
-        <span style={{ animation: "bounceArt 1.8s infinite" }}>🖌️</span>
-        <span style={{ animation: "pulseColor 3s infinite" }}> Top </span>
-        <span style={{ animation: "pulseColor 5s infinite" }}> Art </span>
-        <span style={{ animation: "pulseColor 7s infinite" }}> Works </span>
-        <span style={{ animation: "bounceArt 1.8s infinite" }}>🎨🖼️</span>
-      </h2>
+    <div>
 
-      {/* 🔥 CARDS */}
-      <div className="container mt-5">
-        <div className="row row-cols-1 row-cols-md-4 g-4">
+      <h1 className="heading">🎨 Top Artworks</h1>
 
-          {artworks.map((art) => (
-            <div className="col" key={art.id}>
-              <div className="card h-100 shadow-card">
+      <div className="art-grid">
+        {artworks.map((art) => (
+          <div className="art-card" key={art.id}>
 
-                <img
-                  src={art.image}
-                  className="card-img-top"
-                  style={{
-                    height: "400px",
-                    objectFit: "cover",
-                    border: "10px solid white"
-                  }}
-                  alt={art.title}
-                />
+            <img src={art.image} className="art-img" alt={art.title} />
 
-                <div className="card-body bg-light">
-                  <h5 className="card-title">{art.title}</h5>
+            <h3 className="art-title">{art.title}</h3>
 
-                  <p className="card-text">{art.description}</p>
+            <p className="art-desc">{art.description}</p>
+<div className="price-row">
+ <i 
+  className="fas fa-tag" 
+  style={{ color: "#ffb6c1", fontSize: "20px" }}
+></i>
+  <span className="new">Price :   <span className="old">₹{art.oldPrice}</span> ₹{art.price}</span>
+</div>
 
-                  <div className="d-flex align-items-center gap-2">
-                    <p className="mb-0 fw-semibold text-dark">Price:</p>
-
-                    <h6 className="mb-0 text-muted text-decoration-line-through">
-                      ₹{art.oldPrice}
-                    </h6>
-
-                    <p className="mb-0 fw-bold fs-5">
-                      ₹{art.price}
-                    </p>
-                  </div>
-                </div>
-
-              </div>
-            </div>
-          ))}
-
-        </div>
+          </div>
+        ))}
       </div>
-
-      {/* 🔥 SAME CSS */}
-      <style>
-        {`
-        .shadow-card {
-          box-shadow: 0 8px 20px rgba(0, 0, 0, 0.4);
-          transition: transform 0.3s ease, box-shadow 0.3s ease;
-          border-radius: 16px !important;
-        }
-
-        .shadow-card:hover {
-          transform: translateY(-10px);
-          box-shadow: 0 14px 35px rgba(0, 0, 0, 0.65);
-        }
-
-        /* animations same as yours */
-        @keyframes slideIn {
-          0% { opacity: 0; transform: translateY(-30px); }
-          100% { opacity: 1; transform: translateY(0); }
-        }
-
-        @keyframes bounceArt {
-          0%, 100% { transform: translateY(0); }
-          50% { transform: translateY(-12px); }
-        }
-
-        @keyframes pulseColor {
-          0% { color: #000000e9; }
-          50% { color: #00000060; }
-          100% { color: #000000ff; }
-        }
-        `}
-      </style>
 
     </div>
   );
 };
 
-export  {TopArtworks};
+export { TopArtworks };
