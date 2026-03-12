@@ -5,20 +5,22 @@ const Cart = () => {
   const [cart, setCart] = useState([]);
 
 useEffect(() => {
-  const fetchCart = async () => {
-    const token = localStorage.getItem("token");
+const fetchCart = async () => {
+  const token = localStorage.getItem("token");
 
-    const res = await fetch("http://localhost:5001/api/cart", {
-      headers: {
-        Authorization: "Bearer " + token
-      }
-    });
+  const res = await fetch("http://localhost:5001/api/cart", {
+    headers: {
+      Authorization: "Bearer " + token
+    }
+  });
 
-    const data = await res.json();
+  const data = await res.json();
 
-    setCart(data?.items || []);
-  };
+  // ✅ ONLY KEEP ARTWORK ITEMS
+  const onlyArtworks = (data?.items || []).filter(item => item.artwork);
 
+  setCart(onlyArtworks);
+};
   fetchCart();
 }, []);
 
@@ -45,23 +47,77 @@ const fetchCart = async () => {
   });
 
   const data = await res.json();
-  setCart(data?.items || []);
+
+  // ✅ ONLY KEEP ARTWORK ITEMS
+  const onlyArtworks = (data?.items || []).filter(item => item.artwork);
+
+  setCart(onlyArtworks);
 };
 
-useEffect(() => {
-  fetchCart();
-}, []);
+
 
 const total = cart.reduce((sum, item) => {
-  if (item?.artwork?.price) {
-    return sum + Number(item.artwork.price);
-  }
-  if (item?.commission?.price) {
-    return sum + Number(item.commission.price);
-  }
-  return sum; // skip broken item
+  return sum + Number(item.artwork?.price || 0);
 }, 0);
+const handleCheckout = async () => {
+  const token = localStorage.getItem("token");
 
+  // 1️⃣ Create order
+  const res = await fetch("http://localhost:5001/api/payment/create-order", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: "Bearer " + token
+    },
+    body: JSON.stringify({ amount: total }),
+  });
+
+  const order = await res.json();
+
+  // 2️⃣ Open Razorpay
+  const options = {
+     key: "rzp_test_SMlt206FZs64a8",
+    amount: order.amount,
+    currency: "INR",
+    name: "Aryavarta Art 🎨",
+    description: "Purchase Artwork",
+    order_id: order.id,
+
+    handler: async function (response) {
+      // 3️⃣ VERIFY PAYMENT
+      const verifyRes = await fetch("http://localhost:5001/api/payment/verify-payment", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(response),
+      });
+
+      const data = await verifyRes.json();
+if (data.success) {
+  alert("✅ Payment Successful!");
+
+  // clear cart
+  setCart([]);
+
+  // optional: redirect
+  window.location.href = "/success";
+}
+      if (data.success) {
+        alert("✅ Payment Successful!");
+      } else {
+        alert("❌ Payment Failed!");
+      }
+    },
+
+    theme: {
+      color: "#3399cc",
+    },
+  };
+
+  const rzp = new window.Razorpay(options);
+  rzp.open();
+};
   // 🔥 EXACT SAME CSS (FULL COPY)
   useEffect(() => {
     const style = document.createElement("style");
@@ -304,7 +360,7 @@ h1.title {
         ) : (
           <>
 {cart.map((item, index) => {
-  if (!item?.artwork && !item?.commission) return null; // ✅ skip bad data
+  if (!item?.artwork) return null; // ✅ ONLY artwork
 
   return (
     <div
@@ -312,35 +368,17 @@ h1.title {
       key={index}
       style={{ animationDelay: `${index * 0.15}s` }}
     >
-
-      {item.artwork ? (
-        <img
-          src={`http://localhost:5001${item.artwork.image}`}
-          className="art-img"
-        />
-      ) : (
-        <img
-          src={`http://localhost:5001${item.commission?.image}`}
-          className="art-img"
-        />
-      )}
+      <img
+        src={`http://localhost:5001${item.artwork.image}`}
+        className="art-img"
+      />
 
       <div className="art-details">
-        <h4>
-          🎨 {item.artwork ? item.artwork.title : "Custom Commission"}
-        </h4>
+        <h4>🎨 {item.artwork.title}</h4>
 
         <p className="art-description">
-          {item.artwork
-            ? item.artwork.description
-            : item.commission?.custom}
+          {item.artwork.description}
         </p>
-
-        {item.commission && (
-          <div style={{ color: "#555", fontWeight: "bold" }}>
-            Status: {item.commission.status}
-          </div>
-        )}
 
         <div className="purchase-message">
           🎨 This unique artwork brings creativity and inspiration into your space.
@@ -349,16 +387,13 @@ h1.title {
         </div>
 
         <span className="badge-price">
-          Price : ₹
-          {item.artwork?.price || item.commission?.price || 0}
+          Price : ₹{item.artwork.price}
         </span>
 
         <div className="card-buttons">
           <button
             className="btn-art-purchase btn-remove"
-            onClick={() =>
-              removeItem(item.artwork?._id || item.commission?._id)
-            }
+            onClick={() => removeItem(item.artwork._id)}
           >
             🗑 Remove
           </button>
@@ -370,7 +405,7 @@ h1.title {
       </div>
     </div>
   );
-})} 
+})}
 
             <div className="total-price">
               Total: ₹{total.toLocaleString("en-IN")}
@@ -381,7 +416,10 @@ h1.title {
     <i className="fas fa-arrow-left"></i> Continue Shopping
   </Link>
 
-  <button className="btn-art-purchase btn-checkout">
+<button
+  className="btn-art-purchase btn-checkout"
+  onClick={handleCheckout}
+>
     Proceed to Checkout <i className="fas fa-arrow-right"></i>
   </button>
 </div>

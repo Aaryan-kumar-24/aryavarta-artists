@@ -9,16 +9,16 @@ import "swiper/css/effect-coverflow";
 
 const ArtistSlider = () => {
   return (
-    <div style={{ paddingTop: "120px ", position: "relative" }}>
+    <div style={{ paddingTop: "120px", position: "relative" }}>
       
-      {/* Heading */}
       <h2
         style={{
-          fontFamily: "cursive",
+          fontFamily: "'Indie Flower', cursive",
           fontWeight: "bold",
           fontSize: "3.5rem",
           textAlign: "center",
-          marginBottom: "20px"
+          marginBottom: "20px",
+          color: "#e63946"
         }}
       >
         🏆 Top Artist 🌟 👩‍🎨
@@ -36,26 +36,36 @@ const ArtistSlider = () => {
           prevEl: ".custom-prev"
         }}
         modules={[EffectCoverflow, Navigation]}
-        style={{ paddingTop: "40px", paddingBottom: "60px", overflow: "hidden" }}
+        style={{ paddingTop: "40px", paddingBottom: "60px" }}
         coverflowEffect={{
           rotate: 25,
-          stretch: 0,
           depth: 130,
           modifier: 1,
           slideShadows: false,
         }}
       >
         {artists.map((artist) => (
-          <SwiperSlide key={artist.id} style={{ overflow: "hidden" }}>
-            <div className="artist-card">
-              <img src={artist.image} alt={artist.name} />
-              <p className="artist-name">{artist.name}</p>
+          <SwiperSlide key={artist.id}>
+            
+            <div className="artist-card-wrapper">
+
+              {/* 🔥 BACK CARD UPDATED */}
+              <div className="artist-card-bg"></div>
+
+              <div className="artist-card">
+                <div className="artist-img-wrapper">
+                  <img src={artist.image} alt={artist.name} />
+                </div>
+
+                <p className="artist-name">{artist.name}</p>
+              </div>
+
             </div>
+
           </SwiperSlide>
         ))}
       </Swiper>
 
-      {/* ✏️ Custom Pencil Navigation */}
       <div className="custom-prev">
         <i className="fas fa-pencil-alt"></i>
       </div>
@@ -66,66 +76,118 @@ const ArtistSlider = () => {
 
       <style>
         {`
-        .swiper {
-          overflow: hidden !important;
+        body {
+          background: linear-gradient(to right, #e1ece8ff, #e7ebe0ff, #eee8e3ff);
         }
 
         .swiper-slide {
           display: flex;
           justify-content: center;
           align-items: center;
-          overflow: visible !important;
+          padding:30px;
+        }
+
+        .artist-card-wrapper {
+          position: relative;
+          width: 280px;
+          height: 360px;
+        }
+
+        /* 🔥 UPDATED BACK CARD */
+        .artist-card-bg {
+          position: absolute;
+          width: 280px;
+          height: 390px;
+          
+          background: rgba(255, 255, 255, 0.5); /* lighter */
+          border: 2px dashed rgba(255, 160, 122, 0.4); /* softer border */
+          
+          border-radius: 20px;
+          transform: rotate(-10deg); /* more rotation */
+          
+          top: -12px;
+          left: 12px;
+          
+          opacity: 1.2; /* 🔥 reduced visibility */
+          
+          z-index: 0;
+          transition: 0.4s ease;
         }
 
         .artist-card {
-          width: 18rem;
-          padding: 25px;
-          margin:20px;
-          border-radius: 22px;
+          position: relative;
+          width: 100%;
+          height: 100%;
+          background: #ffffffdd;
+          border: 2px dashed #ffa07a;
+          border-radius: 20px;
+          padding: 40px;
           text-align: center;
-          background: rgba(255, 255, 255, 0.2);
-          backdrop-filter: blur(10px);
-          box-shadow: 0px 10px 18px rgba(0, 0, 0, 0.2);
-          transition: all 0.35s ease;
+          box-shadow: 0 10px 20px rgba(0,0,0,0.15);
+          z-index: 1;
+          transition: transform 0.35s ease, box-shadow 0.35s ease;
         }
 
-        .artist-card:hover {
-          transform: scale(1.088);
+        .artist-card::before,
+        .artist-card::after {
+          position: absolute;
+          font-size: 38px;
+          opacity: 0.7;
+          z-index: 0;
         }
 
-        .swiper-slide-active .artist-card {
-          transform: scale(1.12);
-          background: rgba(255, 255, 255, 0.35);
-          box-shadow: 0px 18px 35px rgba(0, 0, 0, 0.35);
+        .artist-card::before {
+          content: "🌸";
+          top: 8px;
+          left: 10px;
         }
 
-        .artist-card img {
-          height: 220px;
-          width: 220px;
+        .artist-card::after {
+          content: "🌸";
+          bottom: 8px;
+          right: 10px;
+        }
+
+        .artist-img-wrapper {
+          width: 200px;
+          height: 200px;
+          margin: auto;
+          margin-bottom: 15px;
+        }
+
+        .artist-img-wrapper img {
+          width: 100%;
+          height: 100%;
           object-fit: cover;
           border-radius: 50%;
-          margin: auto;
-          transition: 0.3s ease;
-          box-shadow: 0px 0px 15px rgba(255, 255, 255, 0.5);
-        }
-.slider-container {
-  width: 90vw;
-  max-width: 90%;
-  overflow: hidden;
-}
-        .swiper-slide-active .artist-card img {
-          box-shadow: 0px 0px 25px rgba(255, 255, 255, 0.7),
-                      0px 6px 12px rgba(0, 0, 0, 0.25);
+          border: 6px solid white;
+          box-shadow: 0 10px 25px rgba(0,0,0,0.25);
         }
 
         .artist-name {
-          margin-top: 18px;
-          font-size: 2rem;
-          font-family: cursive;
-          color: black;
+          font-family: 'Indie Flower', cursive;
+          font-size: 1.9rem;
+          color: #333;
         }
 
-        /* ✏️ Pencil Navigation */
+        /* HOVER */
+        .artist-card-wrapper:hover .artist-card {
+          transform: scale(1.06);
+          box-shadow: 
+            0 25px 50px rgba(0, 0, 0, 0.2),
+            0 10px 20px rgba(0, 0, 0, 0.26),
+            0 0 0 2px rgba(255, 160, 122, 0.14);
+        }
+
+        .artist-card-wrapper:hover .artist-card-bg {
+          transform: rotate(-13deg) scale(1.07); /* more dramatic on hover */
+          opacity: 0.7;
+        }
+
+        .swiper-slide-active .artist-card {
+          transform: scale(1.1);
+        }
+
         .custom-prev,
         .custom-next {
           position: absolute;
@@ -135,7 +197,6 @@ const ArtistSlider = () => {
           color: #444;
           cursor: pointer;
           z-index: 10;
-          transition: all 0.3s ease;
         }
 
         .custom-prev {

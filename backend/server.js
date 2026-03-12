@@ -28,6 +28,7 @@ app.use("/uploads", express.static("uploads"));
 // ADD THIS
 app.use("/api/artworks", require("./routes/artworkRoutes"));
 
+app.use("/api/payment", require("./routes/paymentRoutes"));
 app.listen(process.env.PORT, () =>
   console.log("Server running on port " + process.env.PORT)
 );

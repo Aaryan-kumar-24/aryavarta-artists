@@ -72,15 +72,7 @@
               alt="slide1"
             />
             <div className="carousel-caption g-4 d-none d-md-block">
-              <Link to="/artworks">
-                <button className="btn btn-primary me-4">New Offers</button>
-              </Link>
-              <Link to="/artworks">
-                <button className="btn btn-warning me-4">Explore</button>
-              </Link>
-              <Link to="/artworks">
-                <button className="btn btn-danger me-4">Best works</button>
-              </Link>
+
             </div>
           </div>
 
@@ -93,15 +85,7 @@
               alt="slide2"
             />
             <div className="carousel-caption g-5 d-none d-md-block">
-              <Link to="/artworks">
-                <button className="btn btn-primary me-4">Buying</button>
-              </Link>
-              <Link to="/cart">
-                <button className="btn btn-success me-4">Selling</button>
-              </Link>
-              <Link to="/learn">
-                <button className="btn btn-danger me-4">Learning</button>
-              </Link>
+
             </div>
           </div>
 
@@ -226,156 +210,196 @@ const CommissionForm = () => {
 
   return (
     <>
+
       <h2 className="doodle-heading">
         <span className="emoji">🎨</span>
-
         <span className="text t1">Let’s</span>
         <span className="text t2">Doodle</span>
         <span className="text t3">Up</span>
         <span className="text t4">Your</span>
         <span className="text t5">Dreams!</span>
-
         <span className="emoji">💭✨</span>
       </h2>
 
-      <div className="commission-fun-form-wrapper">
-        <form className="fun-form" onSubmit={handleSubmit}>
-          <h2 className="text-center fun-title">
-            🎨 Let’s Paint Your Imagination! ✨
-          </h2>
+      {/* CENTER WRAPPER */}
+      <div className="commission-main-layout">
 
-          {/* Section 1 */}
-          <div className="form-section bounce">
-            <div className="field-with-icon">
-              <label>📞 Phone</label>
+        {/* ORIGINAL FORM (UNCHANGED) */}
+        <div className="commission-fun-form-wrapper">
+          <form className="fun-form" onSubmit={handleSubmit}>
+          
+            {/* ALL YOUR ORIGINAL FORM CONTENT REMAINS SAME */}
+
+            <h2 className="text-center fun-title">
+              🎨 Let’s Paint Your Imagination! ✨
+            </h2>
+
+            {/* Section 1 */}
+            <div className="form-section bounce">
+              <div className="field-with-icon">
+                <label>📞 Phone</label>
+                <input
+                  type="number"
+                  name="phone"
+                  value={formData.phone}
+                  required
+                  placeholder="Enter your number 🎯"
+                  onChange={handleChange}
+                />
+              </div>
+
+              <div className="field-with-icon">
+                <label>📧 Email</label>
+                <input
+                  type="email"
+                  name="email"
+                  value={formData.email}
+                  disabled
+                  placeholder="Magical email here ✉️"
+                />
+              </div>
+            </div>
+
+            {/* Section 2 */}
+            <div className="form-section flip">
+              <div className="field-with-icon">
+                <label>🖌️ Art Medium</label>
+                <select
+                  name="medium"
+                  value={formData.medium}
+                  required
+                  onChange={handleChange}
+                >
+                  <option value="">Pick your potion...</option>
+                  <option>Charcoal</option>
+                  <option>Oil Painting</option>
+                  <option>Graphite</option>
+                  <option>Water Color</option>
+                  <option>Pencil Sketch</option>
+                  <option>Any Medium</option>
+                </select>
+              </div>
+
+              <div className="field-with-icon">
+                <label>💰 Price</label>
+                <input
+                  type="number"
+                  name="price"
+                  value={formData.price}
+                  required
+                  placeholder="₹ How much magic?"
+                  onChange={handleChange}
+                />
+              </div>
+            </div>
+
+            {/* Section 3 */}
+            <div className="form-section paint-fall">
+              <div className="field-with-icon">
+                <label>🖼️ Reference Image</label>
+                <input
+                  type="file"
+                  name="image"
+                  ref={fileRef}
+                  required
+                  onChange={handleChange}
+                />
+              </div>
+
+              <div className="field-with-icon">
+                <label>🎨 Artist Name</label>
+                <select
+                  name="artist"
+                  value={formData.artist}
+                  required
+                  onChange={handleChange}
+                >
+                  <option value="">Select Artist 🎨</option>
+                  {artists.map((artist) => (
+                    <option key={artist._id} value={artist._id}>
+                      {artist.name || artist.email}
+                    </option>
+                  ))}
+                </select>
+              </div>
+            </div>
+
+            {/* Section 4 */}
+            <div className="form-section fade-in">
+              <div className="field-with-icon">
+                <label>✨ Customization Details</label>
+                <textarea
+                  name="custom"
+                  value={formData.custom}
+                  rows="3"
+                  required
+                  placeholder="Describe the magic 🧙‍♂️..."
+                  onChange={handleChange}
+                ></textarea>
+              </div>
+            </div>
+
+            <div className="form-check mt-2">
               <input
-                type="number"
-                name="phone"
-                value={formData.phone}
+                className="cheks"
+                type="checkbox"
+                name="agree"
+                checked={formData.agree}
                 required
-                placeholder="Enter your number 🎯"
                 onChange={handleChange}
               />
+              <label>🪄 I want to book this enchanted art!</label>
             </div>
 
-            <div className="field-with-icon">
-              <label>📧 Email</label>
-              <input
-                type="email"
-                name="email"
-                value={formData.email}
-                disabled
-                placeholder="Magical email here ✉️"
-              />
-            </div>
-          </div>
-
-          {/* Section 2 */}
-          <div className="form-section flip">
-            <div className="field-with-icon">
-              <label>🖌️ Art Medium</label>
-              <select
-                name="medium"
-                value={formData.medium}
-                required
-                onChange={handleChange}
-              >
-                <option value="">Pick your potion...</option>
-                <option>Charcoal</option>
-                <option>Oil Painting</option>
-                <option>Graphite</option>
-                <option>Water Color</option>
-                <option>Pencil Sketch</option>
-                <option>Any Medium</option>
-              </select>
+            <div className="text-center mt-3">
+              <button type="submit" className="submit-btn">
+                🚀 Send to Artist!
+              </button>
             </div>
 
-            <div className="field-with-icon">
-              <label>💰 Price</label>
-              <input
-                type="number"
-                name="price"
-                value={formData.price}
-                required
-                placeholder="₹ How much magic?"
-                onChange={handleChange}
-              />
-            </div>
-          </div>
+          </form>
+        </div>
 
-          {/* Section 3 */}
-          <div className="form-section paint-fall">
-            <div className="field-with-icon">
-              <label>🖼️ Reference Image</label>
-              <input
-                type="file"
-                name="image"
-                ref={fileRef}
-                required
-                onChange={handleChange}
-              />
-            </div>
+        {/* IMAGE */}
+        <div className="commission-image">
+          <img src="/static/commision.jpg" alt="Commission Art"/>
+        </div>
 
-            <div className="field-with-icon">
-              <label>🎨 Artist Name</label>
-              <select
-                name="artist"
-                value={formData.artist}
-                required
-                onChange={handleChange}
-              >
-                <option value="">Select Artist 🎨</option>
-                {artists.map((artist) => (
-                  <option key={artist._id} value={artist._id}>
-                    {artist.name || artist.email}
-                  </option>
-                ))}
-              </select>
-            </div>
-          </div>
+      </div>
 
-          {/* Section 4 */}
-          <div className="form-section fade-in">
-            <div className="field-with-icon">
-              <label>✨ Customization Details</label>
-              <textarea
-                name="custom"
-                value={formData.custom}
-                rows="3"
-                required
-                placeholder="Describe the magic 🧙‍♂️..."
-                onChange={handleChange}
-              ></textarea>
-            </div>
-          </div>
+      {/* ✅ IMPORTANT: STYLE TAG RESTORED */}
+      <style>
+        {`
+.commission-main-layout{
+display:flex;
+justify-content:center;
+align-items:center;
+gap:10px;
+flex-wrap:wrap;
+max-width:1300px;
+margin:auto;
+}
 
-          {/* Checkbox */}
-          <div className="form-check mt-2">
-            <input
-              className="cheks"
-              type="checkbox"
-              name="agree"
-              checked={formData.agree}
-              required
-              onChange={handleChange}
-            />
-            <label>🪄 I want to book this enchanted art!</label>
-          </div>
+.commission-image{
+flex:1;
+text-align:center;
+}
 
-          {/* Submit */}
-          <div className="text-center mt-3">
-            <button type="submit" className="submit-btn">
-              🚀 Send to Artist!
-            </button>
-          </div>
-        </form>
+.commission-image img{
+width:100%;
+max-width:520px;
+border-radius:25px;
+}
 
+@keyframes floatArt{
+0%{transform:translateY(0px);}
+50%{transform:translateY(-15px);}
+100%{transform:translateY(0px);}
+}
 
-        <style>
-          {`
           .commission-fun-form-wrapper {
             max-width: 750px;
-            margin: 40px auto;
+            margin: 110px;
             padding: 20px;
             background: linear-gradient(to right, #fff5f7, #e0f7fa);
             border: 4px dotted #ffb6b9;
@@ -558,14 +582,13 @@ const CommissionForm = () => {
             from { opacity: 0; transform: translateX(30px); }
             to { opacity: 1; transform: translateX(0); }
           }
-          `}
-          
-        </style>
-      </div></>
-    );
-  };
+`}
+      </style>
+    </>
+  );
+};
 
-  export { CommissionForm };
+export { CommissionForm };
 
 
 const ArtistDashboard = () => {
@@ -617,170 +640,145 @@ body {
   text-align: center;
   font-size: 3rem;
   margin-top: 40px;
-  color: #333;
   font-family: cursive;
 }
 
-/* CONTAINER */
+/* GRID */
 .container {
-  max-width: 1400px;        /* 🔥 increase width so 3 cards fit */
+  max-width: 1400px;
   margin: 40px auto;
   padding: 25px;
-
-  display: grid;            /* 🔥 ADD GRID */
-  grid-template-columns: repeat(2, 1fr);  /* 🔥 3 CARDS */
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
   gap: 25px;
-  border-radius: 25px;
-}
-  .card {
-  width: 100%;   /* 🔥 IMPORTANT */
-}
-  @media (max-width: 1100px) {
-  .container {
-    grid-template-columns: repeat(2, 1fr);
-  }
 }
 
-@media (max-width: 700px) {
-  .container {
-    grid-template-columns: 1fr;
-  }
-}
 /* CARD */
 .card {
+  position: relative;
   display: flex;
-  flex-direction: row;   /* 🔥 FORCE HORIZONTAL */
-  align-items: stretch;  /* 🔥 SAME HEIGHT */
+  flex-direction: row;
   gap: 20px;
 
-  background: linear-gradient(145deg, #fff6f6, #fdfdfd);
+  background: #ffffffdd;
   border-radius: 20px;
-  margin-bottom: 25px;
   padding: 15px;
 
-  box-shadow: 2px 2px 15px rgba(0, 0, 0, 0.1);
-  transition: 0.3s;
+  border: 2px dashed #ffb6c1; /* 🌸 LIGHT PINK BORDER */
+
+  box-shadow: 0 8px 20px rgba(0,0,0,0.1);
+  transition: 0.35s;
+  overflow: hidden;
+}
+
+/* 🎨 BLOBS */
+.card::before,
+.card::after {
+  content: "";
+  position: absolute;
+  border-radius: 50%;
+  z-index: 0;
+}
+
+/* TOP LEFT */
+.card::before {
+  width: 140px;
+  height: 140px;
+  top: -50px;
+  left: -50px;
+  background: radial-gradient(circle, #ffc0cb, #ffdde1);
+  opacity: 0.35;
+}
+
+/* BOTTOM RIGHT */
+.card::after {
+  width: 120px;
+  height: 120px;
+  bottom: -40px;
+  right: -40px;
+  background: radial-gradient(circle, #ffd6e0, #ffe6eb);
+  opacity: 0.4;
 }
 
 .card:hover {
-  transform: translateY(-5px) scale(1.01);
-  box-shadow: 0 20px 30px rgba(0,0,0,0.15);
+  transform: translateY(-6px) scale(1.02);
+  box-shadow: 0 20px 35px rgba(0,0,0,0.18);
 }
 
-/* IMAGE (FIXED SIZE → NEVER SHRINK) */
+/* IMAGE */
 .card img {
   width: 250px;
   height: 350px;
   object-fit: cover;
-
   border-radius: 15px;
-  flex-shrink: 0;   /* 🔥 IMPORTANT → stops shrinking */
-
-  transition: 0.4s;
+  flex-shrink: 0;
+  z-index: 1;
 }
 
-.card img:hover {
-  transform: scale(1.05);
-}
-
-/* RIGHT SIDE CONTENT */
+/* DETAILS */
 .details {
-  flex: 1;                /* 🔥 TAKE REMAINING SPACE */
+  flex: 1;
   display: flex;
   flex-direction: column;
   justify-content: space-between;
+  z-index: 1;
 }
 
-/* TEXT */
 .details h4 {
-  font-size: 1.8rem;
+  font-size: 1.6rem;
   font-family: cursive;
-  margin-bottom: 8px;
 }
 
 .desc {
   font-size: 0.95rem;
-  color: #444;
-  margin-bottom: 8px;
+  color: #555;
 }
 
-/* STATUS */
 .status {
   font-weight: bold;
-  margin-bottom: 8px;
 }
+.status.pending { color: #856404; }
+.status.accepted { color: #2ec151; }
 
-.status.pending { color: #856404;  }
-.status.accepted { color: #155724; }
-
-/* PRICE */
 .price {
-  font-size: 1.6rem;
+  font-size: 1.5rem;
   font-weight: bold;
   color: #888;
-  margin-bottom: 10px;
 }
 
-/* MESSAGE */
 .message {
   font-size: 0.9rem;
-  background: #f5f5f5;
+  background: #f9f9f9;
   padding: 10px;
-  border-left: 4px solid #ccc;
   border-radius: 8px;
-  margin-bottom: 10px;
 }
 
 /* BUTTONS */
 .buttons {
   display: flex;
-  gap: 20px;
-
-  justify-content: space-between;
+  gap: 15px;
 }
 
-/* BUTTON STYLE */
 .btn {
   border: 1px solid #ddd;
-  
-  padding: 8px 16px;
+  padding: 8px 14px;
   border-radius: 50px;
-  font-size: 0.9rem;
+  background: white;
   cursor: pointer;
-  background-color: white;
-  color: #333;
-  box-shadow: 0 1px 3px rgba(0,0,0,0.28);
-  transition: 0.25s;
+  transition: 0.3s;
 }
 
-/* ACCEPT */
-.accept {
-  border-color: #4caf50;
-  color: #4caf50;
-}
+.accept { color: #4caf50; }
+.reject { color: #f44336; }
 
-.accept:hover {
-  background-color: #e8f5e9;
-  color: #1b5e20;
+.btn:hover {
   transform: translateY(-2px);
 }
 
-/* REJECT */
-.reject {
-  border-color: #f44336;
-  color: #f44336;
-}
-
-.reject:hover {
-  background-color: #fff1f0;
-  color: #a8071a;
-  transform: translateY(-2px);
-}
-
-/* ❌ PREVENT BREAK ON SMALL SCREENS */
+/* RESPONSIVE */
 @media (max-width: 768px) {
   .card {
-    flex-direction: column; /* only mobile */
+    flex-direction: column;
   }
 
   .card img {
@@ -799,80 +797,54 @@ body {
       <h1 className="title">🎨 Commission Requests</h1>
 
       <div className="container">
+        {requests
+          .filter(r => r.status !== "rejected")
+          .map((item, index) => (
+            <div className="card" key={index}>
 
-        {requests.length === 0 ? (
-          <p style={{ textAlign: "center" }}>No requests yet 🎯</p>
-        ) : (
-          requests
-            .filter(r => r.status !== "rejected")
-            .map((item, index) => (
-              <div className="card" key={index}>
+              <img src={`http://localhost:5001${item.image}`} alt="" />
 
-                {/* LEFT IMAGE */}
-                <img
-                  src={`http://localhost:5001${item.image}`}
-                  alt=""
-                />
+              <div className="details">
+                <div>
+                  <h4>🧑 {item.user?.username || "Client"}</h4>
+                  <p className="desc">🎨 {item.medium}</p>
+                  <p className="desc">{item.custom}</p>
 
-                {/* RIGHT CONTENT */}
-                <div className="details">
-
-                  <div>
-                    <h4>🧑 {item.user?.username || "Client"}</h4>
-
-                    <p className="desc">🎨 {item.medium}</p>
-                    <p className="desc">{item.custom}</p>
-
-                    <div className={`status ${item.status}`}>
-                      Status: {item.status}
-                    </div>
-
-                    <div className="price">
-                      ₹{item.price}
-                    </div>
-
-                    <div className="message">
-                      🎨 This custom artwork reflects the buyer’s imagination.
-                      Accept to bring it to life or reject if needed.
-                    </div>
+                  <div className={`status ${item.status}`}>
+                    Status: {item.status}
                   </div>
 
-                  {/* BUTTONS */}
-                  {item.status === "pending" && (
-                    <div className="buttons">
-                      <button
-                        className="btn accept"
-                        onClick={() => updateStatus(item._id, "accepted")}
-                      >
-                        ✅ Accept
-                      </button>
+                  <div className="price">₹{item.price}</div>
 
-                      <button
-                        className="btn reject"
-                        onClick={() => updateStatus(item._id, "rejected")}
-                      >
-                        ❌ Reject
-                      </button>
-                    </div>
-                  )}
-
+                  <div className="message">
+                    🎨 This custom artwork reflects imagination.
+                  </div>
                 </div>
-              </div>
-            ))
-        )}
 
+                {item.status === "pending" && (
+                  <div className="buttons">
+                    <button className="btn accept" onClick={() => updateStatus(item._id, "accepted")}>
+                      ✅ Accept
+                    </button>
+                    <button className="btn reject" onClick={() => updateStatus(item._id, "rejected")}>
+                      ❌ Reject
+                    </button>
+                  </div>
+                )}
+              </div>
+
+            </div>
+          ))}
       </div>
     </div>
   );
 };
 
-export {ArtistDashboard};
-
+export { ArtistDashboard };
 const NotificationBar = () => {
   const [notes, setNotes] = useState([]);
   const [user, setUser] = useState(null);
 
-  // ✅ DELETE FUNCTION
   const deleteNotification = async (id) => {
     const token = localStorage.getItem("token");
 
@@ -883,24 +855,14 @@ const NotificationBar = () => {
       }
     });
 
-    // 🔥 instant UI update
     setNotes(prev => prev.filter(n => n._id !== id));
   };
 
-  // ✅ WATCH LOGIN STATE
   useEffect(() => {
-    const checkUser = () => {
-      const u = JSON.parse(localStorage.getItem("user"));
-      setUser(u);
-    };
-
-    checkUser();
-    window.addEventListener("storage", checkUser);
-
-    return () => window.removeEventListener("storage", checkUser);
+    const u = JSON.parse(localStorage.getItem("user"));
+    setUser(u);
   }, []);
 
-  // ✅ FETCH NOTIFICATIONS
   useEffect(() => {
     if (!user) return;
 
@@ -918,178 +880,132 @@ const NotificationBar = () => {
     };
 
     fetchNotes();
-
     const interval = setInterval(fetchNotes, 5000);
     return () => clearInterval(interval);
   }, [user]);
+
+  useEffect(() => {
+    const style = document.createElement("style");
+
+    style.innerHTML = `
+.notif-grid {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 25px;
+}
+
+.notif-card {
+  position: relative;
+  width: 400px;
+  background: #ffffffdd;
+  border-radius: 20px;
+  padding: 12px;
+
+  border: 2px dashed #ffb6c1;
+  overflow: hidden;
+
+  transition: 0.35s;
+}
+
+/* BLOBS */
+.notif-card::before,
+.notif-card::after {
+  content: "";
+  position: absolute;
+  border-radius: 50%;
+}
+
+.notif-card::before {
+  width: 120px;
+  height: 120px;
+  top: -40px;
+  left: -40px;
+  background: #ffc0cb;
+  opacity: 0.3;
+}
+
+.notif-card::after {
+  width: 100px;
+  height: 100px;
+  bottom: -30px;
+  right: -30px;
+  background: #ffd6e0;
+  opacity: 0.35;
+}
+
+.notif-card:hover {
+  transform: scale(1.03);
+}
+
+.notif-img {
+  width: 100%;
+  height: 400px;
+  object-fit: cover;
+  border-radius: 15px;
+  z-index: 1;
+}
+
+.notif-body {
+  padding: 8px;
+  z-index: 1;
+}
+
+.delete-btn {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  background: white;
+  border-radius: 50%;
+  cursor: pointer;
+}
+`;
+
+    document.head.appendChild(style);
+    return () => document.head.removeChild(style);
+  }, []);
 
   if (!user) return null;
 
   return (
     <div className="notif-wrapper">
-{user?.role !== "seller" && (
-  <h2 className="notif-heading">🔔 Your Notifications</h2>
-)}
+
+      {user?.role !== "seller" && (
+<h2 className="notif-heading" style={{ textAlign: "center" }}>
+  🔔 Your Notifications
+</h2>
+      )}
 
       <div className="notif-grid">
         {notes.map((n, i) => (
           <div key={i} className="notif-card">
 
-            {/* ❌ DELETE BUTTON */}
-            <button
-              className="delete-btn"
-              onClick={() => deleteNotification(n._id)}
-            >
+            <button className="delete-btn" onClick={() => deleteNotification(n._id)}>
               ✖
             </button>
 
-            {/* IMAGE */}
             <img
-              src={
-                n.commissionData?.image
-                  ? `http://localhost:5001${n.commissionData.image}`
-                  : "/images/c1.jpg"
-              }
+              src={`http://localhost:5001${n.commissionData?.image}`}
               className="notif-img"
+              alt=""
             />
 
-            {/* CONTENT */}
             <div className="notif-body">
-              <h4 className="notif-title">{n.message}</h4>
+              <h4>{n.message}</h4>
+              <p>🎨 {n.commissionData?.medium}</p>
+              <p>{n.commissionData?.custom}</p>
 
-              <p className="medium">🎨 {n.commissionData?.medium}</p>
-              <p className="notif-desc">{n.commissionData?.custom}</p>
-
-              <div className="notif-footer">
-                <span className="price">₹{n.commissionData?.price}</span>
-
-                <span className={`status ${n.commissionData?.status}`}>
-                  {n.commissionData?.status}
-                </span>
+              <div style={{ display: "flex", justifyContent: "space-between" }}>
+                <span>₹{n.commissionData?.price}</span>
+                <span>{n.commissionData?.status}</span>
               </div>
             </div>
 
           </div>
         ))}
       </div>
-
-      <style>{`
-        .notif-wrapper {
-          padding: 30px 20px;
-        }
-
-        .notif-heading {
-          text-align: center;
-          font-size: 2.3rem;
-          font-family: cursive;
-          margin-bottom: 25px;
-        }
-
-        .notif-grid {
-          display: flex;
-          flex-wrap: wrap;
-          justify-content: center;
-          gap: 25px;
-        }
-
-        .notif-card {
-          width: 400px;
-          background: white;
-          border-radius: 20px;
-          padding: 12px;
-          box-shadow: 0 8px 20px rgba(0,0,0,0.1);
-          transition: 0.35s;
-          position: relative; /* 🔥 REQUIRED */
-        }
-
-        .notif-card:hover {
-          transform: translateY(-6px) scale(1.02);
-          box-shadow: 0 18px 35px rgba(0,0,0,0.2);
-        }
-
-        /* ❌ DELETE BUTTON */
-        .delete-btn {
-          position: absolute;
-          top: 10px;
-          right: 12px;
-          border: none;
-          background: rgba(251, 239, 239, 0.6);
-          color: white;
-          border-radius: 50%;
-          width: 28px;
-          height: 28px;
-          cursor: pointer;
-          font-size: 0.9rem;
-          transition: 0.3s;
-        }
-
-        .delete-btn:hover {
-          background: #ff4d4d;
-          transform: scale(1.1);
-        }
-
-        /* IMAGE */
-        .notif-img {
-          width: 100%;
-          height: 450px;
-          object-fit: cover;
-          border-radius: 15px;
-        }
-
-        /* CONTENT */
-        .notif-body {
-          padding: 8px 5px;
-        }
-
-        .notif-title {
-          font-family: cursive;
-          font-size: 1.1rem;
-          margin-bottom: 5px;
-        }
-
-        .medium {
-          font-size: 0.85rem;
-          margin-bottom: 3px;
-          color: #555;
-        }
-
-        .notif-desc {
-          font-size: 0.8rem;
-          color: #666;
-          height: 18px;
-          overflow: hidden;
-        }
-
-        .notif-footer {
-          display: flex;
-          justify-content: space-between;
-          align-items: center;
-          margin-top: 6px;
-        }
-
-        .price {
-          font-size: 1.1rem;
-          font-weight: bold;
-          color: #777;
-        }
-
-        .status {
-          padding: 4px 10px;
-          border-radius: 20px;
-          font-size: 0.7rem;
-          font-weight: bold;
-        }
-
-        .status.accepted {
-          color: #2ec151;
-        }
-
-        .status.rejected {
-          color: #bf2f2f;
-        }
-      `}</style>
     </div>
   );
 };
 
-export default NotificationBar;
+export { NotificationBar };

@@ -9,41 +9,58 @@ const AuthPage = () => {
     style.innerHTML = `
     
     body {
-      background: linear-gradient(to right, #e1ece8, #e7ebe0, #eee8e3);
+      background: white;
       font-family: 'Poppins', sans-serif;
     }
 
-    .auth-wrapper {
-      max-width: 420px;
-      margin: 80px auto;
-      background: #ffffffdd;
-      backdrop-filter: blur(20px);
-      border-radius: 25px;
-      padding: 30px;
-      box-shadow: 0 12px 30px rgba(0,0,0,0.2);
-      position: relative;
-      overflow: hidden;
-      animation: fadeIn 0.8s ease;
-    }
+/* MAIN CONTAINER */
+.auth-container {
+  position: relative;
+  width: 100%;
+  height: 100vh;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* IMAGE */
+/* LOGIN IMAGE STYLE */
+.login-img {
+  width: 720px;
+  height: 720px;
+  object-fit: cover;
+}
+
+/* SIGNUP IMAGE STYLE */
+.signup-img {
+  width: 664px;
+  height:747px;
+  object-fit: cover;
+  border-radius: 30px;
+  margin-top: 100px;
+
+  transform: scale(1.03);
+} 
+
+/* FORM POSITIONED ON IMAGE */
+.auth-wrapper {
+  position: absolute;
+
+  width: 350px;
+
+  top: 45%;
+  left: 50%;
+
+  transform: translate(-50%, -50%);
+}
 
     @keyframes fadeIn {
       from { opacity: 0; transform: translateY(-30px);}
       to { opacity: 1; transform: translateY(0);}
     }
 
-    /* floating blobs */
-    .auth-wrapper::before,
-    .auth-wrapper::after {
-      content: "";
-      position: absolute;
-      width: 150px;
-      height: 150px;
-      background: radial-gradient(circle, #fcd5ce, #ffb4a2);
-      border-radius: 50%;
-      opacity: 0.5;
-      z-index: 0;
-      animation: floatBlob 10s infinite alternate;
-    }
+
 
     .auth-wrapper::before {
       top: -40px;
@@ -80,7 +97,7 @@ const AuthPage = () => {
       display: block;
       margin-bottom: 6px;
       font-weight: 500;
-      color: #333;
+      color: #333333c3;
     }
 
 .input-group input,
@@ -97,8 +114,8 @@ const AuthPage = () => {
   border-bottom-left-radius: 12px;
   border-bottom-right-radius: 12px;
 
-  border: none;
-  background: #fff0f6;
+  border: 2px dotted red ;
+  background: #ffffff00;
   font-size: 1rem;
 
   /* 🧠 Fix weird browser styles */
@@ -117,21 +134,34 @@ const AuthPage = () => {
       transform: scale(1.02);
     }
 
-    .btn-auth {
-      width: 60%;
-      padding: 12px;
-      margin-top: 15px;
-      margin-left: 65px;
-      border-radius: 50px;
-      border: none;
-      font-size: 1.2rem;
-      cursor: pointer;
-      background: white;
-      box-shadow: 0 3px 8px rgba(0,0,0,0.2);
-      transition: all 0.3s ease;
-      z-index: 2;
-      position: relative;
-    }
+.btn-auth {
+  width: 30%;
+  padding: 12px;
+  margin-top: 5px;
+  margin-left: 115px;
+
+  border-radius: 50px;
+  border: 1px solid rgba(255, 255, 255, 0.14);
+
+  font-size: 1.2rem;
+  cursor: pointer;
+
+  /* GLASS EFFECT */
+  background: rgba(255, 255, 255, 0);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+
+  color: #333;
+
+  box-shadow:
+    0 8px 20px rgba(0,0,0,0.2),
+    inset 0 0 10px rgba(255, 255, 255, 0.08);
+
+  transition: all 0.35s ease;
+
+  position: relative;
+  overflow: hidden;
+}
 
     .btn-auth:hover {
       background: linear-gradient(to left, #ffafcc, #e63946);
@@ -141,14 +171,31 @@ const AuthPage = () => {
 
     .toggle-text {
       text-align: center;
-      margin-top: 15px;
-      font-size: 14px;
+      margin-top: 260px;
+
+      margin-left: 20px;
+      font-size: 18px;
       z-index: 2;
-      position: relative;
+      color: #ff0000;
+      position: fixed;
+    }
+          .toggle-text1 {
+      text-align: center;
+      margin-top: 160px;
+      margin-left: 20px;
+      font-size: 18px;
+      z-index: 2;
+      color: #ff0000;
+      position: fixed;
     }
 
     .toggle-text span {
-      color: #0077ff;
+      color: #000dff;
+      cursor: pointer;
+      font-weight: bold;
+    }
+          .toggle-text1 span {
+      color: #000dff;
       cursor: pointer;
       font-weight: bold;
     }
@@ -224,11 +271,21 @@ const handleSignup = async (e) => {
     alert("Backend not reachable ❌");
   }
 };
-  return (
+return (
+  <div className="auth-container">
+
+    {/* IMAGE */}
+<img
+  src={isLogin ? "/static/login_bg.png" : "/static/signup.jpg"}
+  className={isLogin ? "auth-image login-img" : "auth-image signup-img"}
+  alt="auth"
+/>
+
+    {/* FORM */}
     <div className="auth-wrapper">
+
       {isLogin ? (
         <>
-          <h2>🎨 Welcome Back Artist</h2>
 
           <form onSubmit={handleLogin}>
             <div className="input-group">
@@ -251,7 +308,7 @@ const handleSignup = async (e) => {
         </>
       ) : (
         <>
-          <h2>🖌️ Join the Art World</h2>
+
 
           <form onSubmit={handleSignup}>
             <div className="input-group">
@@ -290,14 +347,16 @@ const handleSignup = async (e) => {
             <button className="btn-auth">Signup</button>
           </form>
 
-          <div className="toggle-text">
+          <div className={isLogin ? "toggle-text" : "toggle-text1"} >
             Already have an account?{" "}
             <span onClick={() => setIsLogin(true)}>Login here</span>
           </div>
         </>
       )}
+
     </div>
-  );
+  </div>
+);
 };
 
 export { AuthPage};
