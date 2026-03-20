@@ -90,15 +90,6 @@
           </div>
 
           {/* Slide 3 */}
-          <div className="carousel-item" data-bs-interval="2000">
-            <img
-              src="/images/c3.jpg"
-              height="400px"
-              className="d-block w-100"
-              alt="slide3"
-            />
-            <div className="carousel-caption d-none d-md-block"></div>
-          </div>
 
         </div>
 
@@ -520,8 +511,8 @@ border-radius:25px;
     font-size: 3.5rem;
     color: #333;
     display: flex;
-    padding-top: 120px;
-    padding-bottom: 20px;
+    padding-top: 80px;
+    padding-bottom: 1px;
     align-items: center;
     justify-content: center;
     gap: 12px;

@@ -72,6 +72,7 @@ body {
   display:flex;
   height:26px;
   padding-bottom:200px;
+  padding-left:200px;
 }
 
 .logos{
@@ -437,7 +438,7 @@ body {
         <div className="logos" style={{ animation: "bounceArt 1.8s infinite" }}>
           <div className="logo-container">
             <img src="/static/logo.jpg" alt="logo" />
-            <div className="logo-title">Aryavarta Artseller</div>
+            <div className="logo-title">Aryavarta Artists</div>
           </div>
         </div>
 
